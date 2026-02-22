@@ -75,8 +75,11 @@ class RiscVCore {
     inline static constexpr size_t program_mem_base_offset = 0;
     std::mutex mtx_;
     void decode();
+    void execute();
     DecodedInstruction decoded_;
     std::string decoded_string_;
+    std::string register_dump_;
+    std::string dumpRegisters() const;
 
     static constexpr uint32_t bits(uint32_t x, int hi, int lo) noexcept {
         return (x >> lo) & ((1u << (hi - lo + 1)) - 1);

@@ -30,6 +30,9 @@ void RiscVCore::step(){
     decode();
     decoded_string_ = to_string(decoded_);
     std::cout << decoded_string_ << std::endl;
+    execute();
+    register_dump_ = dumpRegisters();
+    std::cout << register_dump_ << std::endl;
     writePC(readPC()+1);
 }
 
@@ -529,4 +532,58 @@ void RiscVCore::decode() {
             break;
     }
 
+}
+
+void RiscVCore::execute(){
+    switch(decoded_.op){
+        case Op::ADD: {
+            std::cout << "ADD Operation called." << std::endl;
+            uint32_t a = readX(decoded_.rs1);
+            uint32_t b = readX(decoded_.rs2);
+            uint32_t r = a + b;
+            writeX(decoded_.rd, r);
+            break;
+        }
+        case Op::SUB: {
+            std::cout << "SUB Operation called." << std::endl;
+            uint32_t a = readX(decoded_.rs1);
+            uint32_t b = readX(decoded_.rs2);
+            uint32_t r = a - b;
+            writeX(decoded_.rd, r);
+            break;
+        }
+        case Op::ADDI: {
+            std::cout << "ADDI Operation called." << std::endl;
+            uint32_t a = readX(decoded_.rs1);
+            uint32_t b = decoded_.imm;
+            uint32_t r = a + b;
+            writeX(decoded_.rd, r);
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+std::string RiscVCore::dumpRegisters() const {
+    std::ostringstream os;
+
+    os << "==== Register Dump ====\n";
+
+    for (size_t i = 0; i < x_.size(); ++i) {
+        os << "x" << std::setw(2) << std::setfill(' ') << i << " = "
+           << "0x" << std::hex << std::setw(8) << std::setfill('0') << x_[i]
+           << "  (" << std::dec << static_cast<int32_t>(x_[i]) << ")";
+
+        if (i % 4 == 3)
+            os << "\n";
+        else
+            os << "    ";
+    }
+
+    os << "PC = 0x"
+       << std::hex << std::setw(8) << std::setfill('0') << pc
+       << "  (" << std::dec << pc << ")\n";
+
+    return os.str();
 }
