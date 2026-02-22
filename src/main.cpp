@@ -21,8 +21,8 @@ std::vector<uint32_t> program = {
 };
 
 int main() {
-    std::cout << "Hallo Welt\n";
     Memory memory(1024);
+    
     memory.writeMem(0, program[0]);
     memory.writeMem(1, program[1]);
     memory.writeMem(2, program[2]);
@@ -40,9 +40,12 @@ int main() {
     memory.writeMem(14, program[14]);
     
     RiscVCore cpu(memory);
-    
-    std::cout << memory.readMem(1) << std::endl;
 
+    cpu.step();
+    cpu.step();
+    cpu.step();
+    cpu.step();
+    cpu.step();
     cpu.step();
     cpu.step();
     cpu.step();

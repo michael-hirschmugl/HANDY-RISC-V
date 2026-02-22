@@ -74,8 +74,9 @@ class RiscVCore {
     void fetch();
     inline static constexpr size_t program_mem_base_offset = 0;
     std::mutex mtx_;
-    std::string decode();
+    void decode();
     DecodedInstruction decoded_;
+    std::string decoded_string_;
 
     static constexpr uint32_t bits(uint32_t x, int hi, int lo) noexcept {
         return (x >> lo) & ((1u << (hi - lo + 1)) - 1);

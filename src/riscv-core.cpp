@@ -27,7 +27,9 @@ void RiscVCore::writeX(size_t pos, uint32_t value){
 void RiscVCore::step(){
     //std::cout << "single step" << std::endl;
     fetch();
-    std::cout << decode() << std::endl;
+    decode();
+    decoded_string_ = to_string(decoded_);
+    std::cout << decoded_string_ << std::endl;
     writePC(readPC()+1);
 }
 
@@ -35,7 +37,7 @@ void RiscVCore::fetch(){
     instruction = mem_.readMem(program_mem_base_offset + pc);
 }
 
-std::string RiscVCore::decode() {
+void RiscVCore::decode() {
     uint32_t opcode = bits(instruction, 6, 0);
     uint32_t rd     = bits(instruction, 11, 7);
     uint32_t funct3 = bits(instruction, 14, 12);
@@ -527,5 +529,4 @@ std::string RiscVCore::decode() {
             break;
     }
 
-    return to_string(decoded_);
 }
