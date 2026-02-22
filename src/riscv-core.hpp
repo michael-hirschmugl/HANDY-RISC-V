@@ -25,5 +25,7 @@ class RiscVCore {
     inline static constexpr size_t program_mem_base_offset = 0;
     std::mutex mtx_;
     void decode();
+    static inline uint32_t bits(uint32_t x, int hi, int lo);
+    static inline int32_t sext(uint32_t x, int width);
 
 };
